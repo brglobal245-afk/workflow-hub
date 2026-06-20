@@ -53,8 +53,8 @@ export default function LandingPage() {
       <style>{`
         .landing-page-wrapper {
           font-family: var(--font-sans);
-          background: #090d16;
-          color: #f8fafc;
+          background: #ffffff;
+          color: #475569;
           min-height: 100vh;
           overflow-x: hidden;
           scroll-behavior: smooth;
@@ -67,10 +67,10 @@ export default function LandingPage() {
           left: 0;
           right: 0;
           height: 72px;
-          background: rgba(9, 13, 22, 0.7);
+          background: rgba(255, 255, 255, 0.8);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          border-bottom: 1px solid #e2e8f0;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -91,13 +91,13 @@ export default function LandingPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
         .nav-logo-text {
           font-family: var(--font-display);
           font-size: 1.25rem;
           font-weight: 700;
-          background: linear-gradient(to right, #ffffff, #c7d2fe);
+          background: linear-gradient(to right, #0f172a, #312e81);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }
@@ -107,7 +107,7 @@ export default function LandingPage() {
           gap: 2.5rem;
         }
         .nav-link {
-          color: #94a3b8;
+          color: #475569;
           font-size: 0.9375rem;
           font-weight: 500;
           background: none;
@@ -116,7 +116,7 @@ export default function LandingPage() {
           transition: var(--transition-fast);
         }
         .nav-link:hover {
-          color: #ffffff;
+          color: var(--primary-600);
         }
         .nav-actions {
           display: flex;
@@ -125,8 +125,8 @@ export default function LandingPage() {
         }
         .btn-nav-outline {
           background: transparent;
-          color: #ffffff;
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #334155;
+          border: 1px solid #cbd5e1;
           padding: 0.5rem 1.25rem;
           border-radius: 8px;
           font-weight: 500;
@@ -135,8 +135,8 @@ export default function LandingPage() {
           transition: var(--transition-fast);
         }
         .btn-nav-outline:hover {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: #ffffff;
+          background: #f8fafc;
+          border-color: #94a3b8;
         }
         .btn-nav-primary {
           background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
@@ -147,12 +147,12 @@ export default function LandingPage() {
           font-weight: 500;
           font-size: 0.875rem;
           cursor: pointer;
-          box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
           transition: var(--transition-fast);
         }
         .btn-nav-primary:hover {
           transform: translateY(-1px);
-          box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4);
+          box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
         }
 
         /* Hero Section */
@@ -163,12 +163,12 @@ export default function LandingPage() {
           align-items: center;
           text-align: center;
           position: relative;
-          background-image: radial-gradient(circle at top, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
+          background-image: radial-gradient(circle at top, rgba(99, 102, 241, 0.04) 0%, transparent 60%);
         }
         .hero-badge {
-          background: rgba(99, 102, 241, 0.1);
-          border: 1px solid rgba(99, 102, 241, 0.2);
-          color: #818cf8;
+          background: rgba(99, 102, 241, 0.08);
+          border: 1px solid rgba(99, 102, 241, 0.15);
+          color: #4f46e5;
           padding: 0.375rem 1rem;
           border-radius: 100px;
           font-size: 0.8125rem;
@@ -185,12 +185,14 @@ export default function LandingPage() {
           letter-spacing: -0.02em;
           max-width: 900px;
           margin-bottom: 1.5rem;
-          background: linear-gradient(to bottom, #ffffff 60%, #cbd5e1 100%);
+          color: #0f172a;
+          background: linear-gradient(to bottom, #0f172a 60%, #334155 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
         .hero-subtitle {
-          color: #94a3b8;
+          color: #475569;
           font-size: 1.25rem;
           line-height: 1.7;
           max-width: 680px;
@@ -211,7 +213,7 @@ export default function LandingPage() {
           font-size: 1rem;
           border: none;
           cursor: pointer;
-          box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+          box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
           transition: all 0.2s ease;
           display: flex;
           align-items: center;
@@ -219,51 +221,51 @@ export default function LandingPage() {
         }
         .btn-cta-primary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5);
+          box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
         }
         .btn-cta-secondary {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #ffffff;
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
+          color: #334155;
           padding: 0.875rem 2rem;
           border-radius: 10px;
           font-weight: 600;
           font-size: 1rem;
           cursor: pointer;
           transition: all 0.2s ease;
+          box-shadow: var(--shadow-xs);
         }
         .btn-cta-secondary:hover {
-          background: rgba(255, 255, 255, 0.08);
-          border-color: rgba(255, 255, 255, 0.2);
+          background: #f8fafc;
+          border-color: #94a3b8;
         }
 
         /* Mockup Frame */
         .mockup-container {
           width: 100%;
           max-width: 1100px;
-          background: rgba(30, 41, 59, 0.3);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           border-radius: 16px;
           padding: 0.5rem;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.06);
         }
         .mockup-header {
           display: flex;
           align-items: center;
           gap: 0.375rem;
           padding: 0.5rem 1rem;
-          background: rgba(15, 23, 42, 0.4);
+          background: #f8fafc;
           border-radius: 12px 12px 0 0;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          border-bottom: 1px solid #e2e8f0;
         }
         .mockup-dot {
           width: 9px;
           height: 9px;
           border-radius: 50%;
-          background: rgba(255, 255, 255, 0.2);
         }
         .mockup-content {
-          background: #0b111e;
+          background: #f8fafc;
           border-radius: 0 0 12px 12px;
           height: 380px;
           display: flex;
@@ -279,8 +281,8 @@ export default function LandingPage() {
           height: 100%;
         }
         .mockup-sidebar {
-          background: #080c14;
-          border-right: 1px solid rgba(255,255,255,0.03);
+          background: #ffffff;
+          border-right: 1px solid #e2e8f0;
           padding: 1.5rem 1rem;
           display: flex;
           flex-direction: column;
@@ -289,11 +291,11 @@ export default function LandingPage() {
         .mockup-sidebar-item {
           height: 28px;
           border-radius: 6px;
-          background: rgba(255, 255, 255, 0.03);
+          background: #f1f5f9;
           width: 100%;
         }
         .mockup-sidebar-item.active {
-          background: rgba(99, 102, 241, 0.15);
+          background: rgba(99, 102, 241, 0.08);
         }
         .mockup-body {
           padding: 2rem;
@@ -313,8 +315,8 @@ export default function LandingPage() {
           gap: 1.25rem;
         }
         .mockup-card {
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.05);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           border-radius: 10px;
           padding: 1.25rem;
           display: flex;
@@ -337,9 +339,10 @@ export default function LandingPage() {
           font-size: 2.5rem;
           font-weight: 800;
           margin-bottom: 1rem;
+          color: #0f172a;
         }
         .section-subtitle {
-          color: #94a3b8;
+          color: #64748b;
           max-width: 580px;
           margin: 0 auto;
         }
@@ -349,8 +352,8 @@ export default function LandingPage() {
           gap: 1.5rem;
         }
         .feature-card {
-          background: rgba(15, 23, 42, 0.3);
-          border: 1px solid rgba(255, 255, 255, 0.04);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           padding: 2rem 1.5rem;
           border-radius: 14px;
           transition: all 0.25s ease;
@@ -361,15 +364,15 @@ export default function LandingPage() {
         .feature-card:hover {
           transform: translateY(-4px);
           border-color: rgba(99, 102, 241, 0.3);
-          background: rgba(15, 23, 42, 0.5);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+          background: #ffffff;
+          box-shadow: 0 12px 30px rgba(99, 102, 241, 0.04);
         }
         .feature-icon-wrapper {
           width: 44px;
           height: 44px;
           border-radius: 10px;
-          background: rgba(99, 102, 241, 0.1);
-          color: #818cf8;
+          background: rgba(99, 102, 241, 0.08);
+          color: #4f46e5;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -377,15 +380,16 @@ export default function LandingPage() {
         .feature-card:hover .feature-icon-wrapper {
           background: var(--primary-500);
           color: #ffffff;
-          box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
         .feature-title {
           font-family: var(--font-display);
           font-size: 1.125rem;
           font-weight: 700;
+          color: #0f172a;
         }
         .feature-desc {
-          color: #94a3b8;
+          color: #64748b;
           font-size: 0.875rem;
           line-height: 1.6;
         }
@@ -393,8 +397,10 @@ export default function LandingPage() {
         /* Pricing Section */
         .section-pricing {
           padding: 8rem 4rem;
-          background: #060910;
+          background: #f8fafc;
           position: relative;
+          border-top: 1px solid #e2e8f0;
+          border-bottom: 1px solid #e2e8f0;
         }
         .billing-toggle {
           display: flex;
@@ -406,16 +412,16 @@ export default function LandingPage() {
         .billing-label {
           font-weight: 500;
           font-size: 0.9375rem;
-          color: #94a3b8;
+          color: #64748b;
         }
         .billing-label.active {
-          color: #ffffff;
+          color: #0f172a;
           font-weight: 600;
         }
         .toggle-switch {
           width: 48px;
           height: 26px;
-          background: rgba(255, 255, 255, 0.1);
+          background: #cbd5e1;
           border-radius: 100px;
           position: relative;
           cursor: pointer;
@@ -438,8 +444,8 @@ export default function LandingPage() {
           left: 25px;
         }
         .yearly-badge {
-          background: rgba(34, 197, 94, 0.15);
-          color: #4ade80;
+          background: rgba(34, 197, 94, 0.12);
+          color: #16a34a;
           padding: 0.25rem 0.5rem;
           border-radius: 100px;
           font-size: 0.75rem;
@@ -453,8 +459,8 @@ export default function LandingPage() {
           margin: 0 auto;
         }
         .pricing-card {
-          background: rgba(15, 23, 42, 0.4);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           border-radius: 16px;
           padding: 3rem 2.25rem;
           display: flex;
@@ -464,8 +470,8 @@ export default function LandingPage() {
         }
         .pricing-card.popular {
           border-color: var(--primary-500);
-          background: rgba(15, 23, 42, 0.6);
-          box-shadow: 0 20px 40px rgba(99, 102, 241, 0.08);
+          background: #ffffff;
+          box-shadow: 0 20px 40px rgba(99, 102, 241, 0.04);
         }
         .pricing-popular-badge {
           position: absolute;
@@ -480,19 +486,22 @@ export default function LandingPage() {
         }
         .pricing-card:hover {
           transform: translateY(-4px);
-          border-color: rgba(255, 255, 255, 0.15);
+          border-color: #cbd5e1;
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.02);
         }
         .pricing-card.popular:hover {
           border-color: var(--primary-400);
+          box-shadow: 0 16px 36px rgba(99, 102, 241, 0.08);
         }
         .pricing-title {
           font-family: var(--font-display);
           font-size: 1.25rem;
           font-weight: 700;
           margin-bottom: 0.5rem;
+          color: #0f172a;
         }
         .pricing-desc {
-          color: #94a3b8;
+          color: #64748b;
           font-size: 0.875rem;
           margin-bottom: 2rem;
           min-height: 40px;
@@ -506,13 +515,15 @@ export default function LandingPage() {
         .pricing-currency {
           font-size: 1.5rem;
           font-weight: 700;
+          color: #0f172a;
         }
         .pricing-price {
           font-size: 3rem;
           font-weight: 800;
+          color: #0f172a;
         }
         .pricing-period {
-          color: #94a3b8;
+          color: #64748b;
           font-size: 0.875rem;
         }
         .pricing-btn {
@@ -527,18 +538,18 @@ export default function LandingPage() {
         }
         .btn-pricing-outline {
           background: transparent;
-          color: #ffffff;
-          border: 1px solid rgba(255,255,255,0.15);
+          color: var(--primary-600);
+          border: 1px solid rgba(99, 102, 241, 0.3);
         }
         .btn-pricing-outline:hover {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: #ffffff;
+          background: rgba(99, 102, 241, 0.05);
+          border-color: var(--primary-600);
         }
         .btn-pricing-solid {
           background: var(--primary-600);
           color: #ffffff;
           border: none;
-          box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
         .btn-pricing-solid:hover {
           background: var(--primary-500);
@@ -556,10 +567,10 @@ export default function LandingPage() {
           align-items: center;
           gap: 0.75rem;
           font-size: 0.875rem;
-          color: #cbd5e1;
+          color: #475569;
         }
         .pricing-check-icon {
-          color: #22c55e;
+          color: #16a34a;
           flex-shrink: 0;
         }
 
@@ -583,9 +594,10 @@ export default function LandingPage() {
           font-size: 2.5rem;
           font-weight: 800;
           line-height: 1.2;
+          color: #0f172a;
         }
         .about-desc {
-          color: #94a3b8;
+          color: #475569;
           font-size: 1.0625rem;
           line-height: 1.7;
         }
@@ -603,11 +615,11 @@ export default function LandingPage() {
         .about-stat-num {
           font-size: 2.5rem;
           font-weight: 800;
-          color: var(--primary-400);
+          color: var(--primary-600);
         }
         .about-stat-label {
           font-size: 0.875rem;
-          color: #94a3b8;
+          color: #64748b;
           font-weight: 500;
         }
         .about-visual {
@@ -620,27 +632,28 @@ export default function LandingPage() {
           position: absolute;
           width: 300px;
           height: 300px;
-          background: rgba(99, 102, 241, 0.15);
+          background: rgba(99, 102, 241, 0.08);
           filter: blur(80px);
           border-radius: 50%;
           z-index: 1;
         }
         .about-visual-card {
-          background: rgba(15, 23, 42, 0.5);
-          border: 1px solid rgba(255,255,255,0.06);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           border-radius: 16px;
           padding: 2.5rem;
           width: 100%;
           max-width: 440px;
           position: relative;
           z-index: 2;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
         }
 
         /* Contact Section */
         .section-contact {
           padding: 8rem 4rem;
-          background: #060910;
+          background: #f8fafc;
+          border-top: 1px solid #e2e8f0;
         }
         .contact-container {
           max-width: 950px;
@@ -648,10 +661,11 @@ export default function LandingPage() {
           display: grid;
           grid-template-columns: 380px 1fr;
           gap: 4rem;
-          background: rgba(15, 23, 42, 0.3);
-          border: 1px solid rgba(255,255,255,0.04);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
           border-radius: 20px;
           padding: 3.5rem;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
         }
         .contact-info {
           display: flex;
@@ -663,9 +677,10 @@ export default function LandingPage() {
           font-size: 2rem;
           font-weight: 800;
           margin-bottom: 0.5rem;
+          color: #0f172a;
         }
         .contact-info-desc {
-          color: #94a3b8;
+          color: #64748b;
           font-size: 0.9375rem;
           line-height: 1.6;
         }
@@ -679,14 +694,14 @@ export default function LandingPage() {
           align-items: center;
           gap: 1rem;
           font-size: 0.875rem;
-          color: #cbd5e1;
+          color: #475569;
         }
         .contact-method-icon {
           width: 36px;
           height: 36px;
           border-radius: 8px;
-          background: rgba(99, 102, 241, 0.1);
-          color: #818cf8;
+          background: rgba(99, 102, 241, 0.08);
+          color: #4f46e5;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -705,21 +720,21 @@ export default function LandingPage() {
         .contact-label {
           font-size: 0.8125rem;
           font-weight: 600;
-          color: #cbd5e1;
+          color: #475569;
         }
         .contact-input {
-          background: rgba(15, 23, 42, 0.6);
-          border: 1px solid rgba(255,255,255,0.08);
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
           border-radius: 8px;
           padding: 0.75rem 1rem;
-          color: #ffffff;
+          color: #0f172a;
           font-size: 0.875rem;
           outline: none;
           transition: all 0.2s;
         }
         .contact-input:focus {
           border-color: var(--primary-500);
-          box-shadow: 0 0 0 2px rgba(99,102,241,0.25);
+          box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
         }
         .btn-submit {
           background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
@@ -734,19 +749,19 @@ export default function LandingPage() {
           align-items: center;
           justify-content: center;
           gap: 0.5rem;
-          box-shadow: 0 4px 14px rgba(99,102,241,0.25);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
           transition: all 0.2s;
           margin-top: 0.5rem;
         }
         .btn-submit:hover {
           transform: translateY(-1px);
-          box-shadow: 0 6px 18px rgba(99,102,241,0.35);
+          box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
         }
 
         /* Footer */
         .landing-footer {
           padding: 5rem 4rem 3rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          border-top: 1px solid #e2e8f0;
           max-width: 1200px;
           margin: 0 auto;
           display: flex;
@@ -765,7 +780,7 @@ export default function LandingPage() {
           max-width: 320px;
         }
         .footer-tagline {
-          color: #94a3b8;
+          color: #64748b;
           font-size: 0.875rem;
           line-height: 1.6;
         }
@@ -784,24 +799,24 @@ export default function LandingPage() {
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          color: #cbd5e1;
+          color: #0f172a;
         }
         .footer-link {
-          color: #94a3b8;
+          color: #64748b;
           font-size: 0.875rem;
           text-decoration: none;
           transition: var(--transition-fast);
         }
         .footer-link:hover {
-          color: #ffffff;
+          color: var(--primary-600);
         }
         .footer-bottom {
           display: flex;
           justify-content: space-between;
           align-items: center;
           padding-top: 2rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.05);
-          color: #64748b;
+          border-top: 1px solid #e2e8f0;
+          color: #94a3b8;
           font-size: 0.8125rem;
         }
 
@@ -915,7 +930,7 @@ export default function LandingPage() {
               <div className="mockup-sidebar">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
                   <div style={{ width: 20, height: 20, borderRadius: 4, background: 'var(--primary-500)' }} />
-                  <div style={{ height: 10, width: 70, background: '#1e293b', borderRadius: 4 }} />
+                  <div style={{ height: 10, width: 70, background: '#e2e8f0', borderRadius: 4 }} />
                 </div>
                 <div className="mockup-sidebar-item active" />
                 <div className="mockup-sidebar-item" />
@@ -926,40 +941,40 @@ export default function LandingPage() {
               <div className="mockup-body">
                 <div className="mockup-body-header">
                   <div>
-                    <div style={{ height: 16, width: 140, background: '#1e293b', borderRadius: 4, marginBottom: '0.5rem' }} />
-                    <div style={{ height: 10, width: 220, background: '#0f172a', borderRadius: 4 }} />
+                    <div style={{ height: 16, width: 140, background: '#cbd5e1', borderRadius: 4, marginBottom: '0.5rem' }} />
+                    <div style={{ height: 10, width: 220, background: '#e2e8f0', borderRadius: 4 }} />
                   </div>
-                  <div style={{ height: 32, width: 90, background: 'rgba(99, 102, 241, 0.2)', border: '1px solid rgba(99, 102, 241, 0.3)', borderRadius: 8 }} />
+                  <div style={{ height: 32, width: 90, background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.2)', borderRadius: 8 }} />
                 </div>
                 <div className="mockup-card-grid">
                   <div className="mockup-card">
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(34, 197, 94, 0.2)' }} />
-                      <div style={{ height: 8, width: 60, background: '#1e293b', borderRadius: 4 }} />
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(34, 197, 94, 0.15)' }} />
+                      <div style={{ height: 8, width: 60, background: '#cbd5e1', borderRadius: 4 }} />
                     </div>
-                    <div style={{ height: 24, width: 40, background: '#fff', borderRadius: 4 }} />
-                    <div style={{ height: 8, width: '100%', background: '#0f172a', borderRadius: 4 }} />
+                    <div style={{ height: 24, width: 40, background: '#f8fafc', borderRadius: 4, border: '1px solid #e2e8f0' }} />
+                    <div style={{ height: 8, width: '100%', background: '#e2e8f0', borderRadius: 4 }} />
                   </div>
                   <div className="mockup-card" style={{ borderLeft: '3px solid var(--primary-500)' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(99, 102, 241, 0.2)' }} />
-                      <div style={{ height: 8, width: 70, background: '#1e293b', borderRadius: 4 }} />
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(99, 102, 241, 0.15)' }} />
+                      <div style={{ height: 8, width: 70, background: '#cbd5e1', borderRadius: 4 }} />
                     </div>
-                    <div style={{ height: 24, width: 50, background: '#fff', borderRadius: 4 }} />
-                    <div style={{ height: 8, width: '90%', background: '#0f172a', borderRadius: 4 }} />
+                    <div style={{ height: 24, width: 50, background: '#f8fafc', borderRadius: 4, border: '1px solid #e2e8f0' }} />
+                    <div style={{ height: 8, width: '90%', background: '#e2e8f0', borderRadius: 4 }} />
                   </div>
                   <div className="mockup-card">
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(245, 158, 11, 0.2)' }} />
-                      <div style={{ height: 8, width: 55, background: '#1e293b', borderRadius: 4 }} />
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(245, 158, 11, 0.15)' }} />
+                      <div style={{ height: 8, width: 55, background: '#cbd5e1', borderRadius: 4 }} />
                     </div>
-                    <div style={{ height: 24, width: 35, background: '#fff', borderRadius: 4 }} />
-                    <div style={{ height: 8, width: '80%', background: '#0f172a', borderRadius: 4 }} />
+                    <div style={{ height: 24, width: 35, background: '#f8fafc', borderRadius: 4, border: '1px solid #e2e8f0' }} />
+                    <div style={{ height: 8, width: '80%', background: '#e2e8f0', borderRadius: 4 }} />
                   </div>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem', height: 110 }}>
-                  <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: 10, padding: '1rem' }} />
-                  <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: 10, padding: '1rem' }} />
+                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, padding: '1rem' }} />
+                  <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, padding: '1rem' }} />
                 </div>
               </div>
             </div>
@@ -1098,15 +1113,15 @@ export default function LandingPage() {
           <div className="about-visual-card">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                <Shield size={24} color="var(--primary-400)" />
-                <span style={{ fontWeight: 700, fontSize: '1.125rem' }}>Security Framework</span>
+                <Shield size={24} color="var(--primary-500)" />
+                <span style={{ fontWeight: 700, fontSize: '1.125rem', color: '#0f172a' }}>Security Framework</span>
               </div>
-              <p style={{ fontSize: '0.875rem', color: '#94a3b8', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '0.875rem', color: '#475569', lineHeight: 1.6 }}>
                 Each tenant's data resides behind custom security rules. Rest assured that sensitive files, private logs, and personal feedback are completely safe.
               </p>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                 {['RBAC Security', 'PostgreSQL RLS', 'SSO Ready', 'Audit Logs'].map(t => (
-                  <span key={t} style={{ background: 'rgba(255,255,255,0.05)', padding: '0.25rem 0.625rem', borderRadius: 4, fontSize: '0.75rem', color: '#cbd5e1' }}>{t}</span>
+                  <span key={t} style={{ background: '#f1f5f9', border: '1px solid #e2e8f0', padding: '0.25rem 0.625rem', borderRadius: 4, fontSize: '0.75rem', color: '#475569' }}>{t}</span>
                 ))}
               </div>
             </div>

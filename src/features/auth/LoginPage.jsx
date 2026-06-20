@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { Briefcase, ArrowLeft, ArrowRight, Mail, Lock, User, CheckCircle2 } from 'lucide-react';
+import { Briefcase, ArrowLeft, ArrowRight, Mail, Lock, User, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { toast, Toaster } from 'react-hot-toast';
+import animationVideo from '../../assets/animation.mp4';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function LoginPage() {
   const [signUpPassword, setSignUpPassword] = useState('');
   
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Set active tab based on query params (e.g. ?signup=true)
   useEffect(() => {
@@ -79,24 +81,24 @@ export default function LoginPage() {
     }
   };
 
-
   return (
     <div className="auth-page-container">
       <Toaster position="top-right" />
       <style>{`
         .auth-page-container {
-          background: #090d16;
-          color: #f8fafc;
+          background: #f8fafc;
+          color: #0f172a;
           min-height: 100vh;
           width: 100vw;
           display: flex;
           align-items: center;
           justify-content: center;
           position: relative;
-          padding: 2rem;
+          padding: 2.5rem;
           font-family: var(--font-sans);
           overflow-y: auto;
-          background-image: radial-gradient(circle at center, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+          background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+                            radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 50%);
         }
 
         .btn-back-home {
@@ -106,9 +108,9 @@ export default function LoginPage() {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          color: #94a3b8;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          color: #64748b;
           padding: 0.5rem 1rem;
           border-radius: 8px;
           cursor: pointer;
@@ -116,73 +118,124 @@ export default function LoginPage() {
           font-weight: 500;
           transition: var(--transition-fast);
           z-index: 10;
+          box-shadow: var(--shadow-xs);
         }
         .btn-back-home:hover {
-          color: #ffffff;
-          background: rgba(255,255,255,0.08);
-          border-color: rgba(255,255,255,0.15);
+          color: #0f172a;
+          background: #f1f5f9;
+          border-color: #cbd5e1;
         }
 
-        .auth-card {
-          background: rgba(15, 23, 42, 0.45);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          border-radius: 20px;
+        .auth-split-card {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 24px;
           width: 100%;
-          max-width: 460px;
-          padding: 3rem 2.5rem;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
+          max-width: 1080px;
+          min-height: 600px;
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+          display: grid;
+          grid-template-columns: 1.1fr 1fr;
+          overflow: hidden;
           position: relative;
         }
 
-        .auth-logo-box {
+        /* Left panel for animation */
+        .auth-animation-panel {
+          background: #f1f5f9;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.75rem;
+          padding: 2.5rem;
+          border-right: 1px solid #e2e8f0;
+          position: relative;
+        }
+
+        .auth-video-wrapper {
+          width: 100%;
+          height: 100%;
+          min-height: 420px;
+          max-height: 520px;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+
+        .auth-video-element {
+          width: 135%;
+          height: 100%;
+          object-fit: cover;
+          object-position: left center;
+          display: block;
+        }
+
+        /* Right panel for form */
+        .auth-form-panel {
+          padding: 3.5rem 3rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          position: relative;
+          background: #ffffff;
+        }
+
+        .auth-header {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           margin-bottom: 2rem;
+          text-align: center;
         }
-        .auth-logo-icon {
-          width: 36px;
-          height: 36px;
-          border-radius: 9px;
-          background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+
+        .auth-avatar-circle {
+          width: 72px;
+          height: 72px;
+          border-radius: 50%;
+          background: #2563eb;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+          margin-bottom: 0.75rem;
+          box-shadow: 0 8px 16px rgba(37, 99, 235, 0.15);
         }
-        .auth-logo-text {
+
+        .auth-title {
           font-family: var(--font-display);
-          font-size: 1.25rem;
+          font-size: 1.75rem;
           font-weight: 700;
-          color: #ffffff;
+          color: #0f172a;
+          margin: 0;
         }
 
         .auth-tabs {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          background: rgba(255,255,255,0.04);
+          background: #f1f5f9;
           padding: 0.25rem;
-          border-radius: 8px;
+          border-radius: 10px;
           margin-bottom: 2rem;
         }
         .auth-tab-btn {
           background: transparent;
           border: none;
-          color: #94a3b8;
-          padding: 0.5rem;
+          color: #64748b;
+          padding: 0.625rem;
           font-weight: 600;
           font-size: 0.875rem;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
           transition: all 0.15s ease;
         }
         .auth-tab-btn.active {
-          background: rgba(255,255,255,0.08);
-          color: #ffffff;
-          box-shadow: var(--shadow-sm);
+          background: #ffffff;
+          color: #2563eb;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .auth-form {
@@ -198,7 +251,7 @@ export default function LoginPage() {
         .auth-label {
           font-size: 0.75rem;
           font-weight: 600;
-          color: #cbd5e1;
+          color: #475569;
         }
         .auth-input-wrapper {
           position: relative;
@@ -208,26 +261,44 @@ export default function LoginPage() {
           left: 0.875rem;
           top: 50%;
           transform: translateY(-50%);
-          color: #64748b;
+          color: #94a3b8;
         }
         .auth-input {
           width: 100%;
-          background: rgba(15, 23, 42, 0.6);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
           border-radius: 8px;
-          padding: 0.75rem 1rem 0.75rem 2.5rem;
-          color: #ffffff;
+          padding: 0.75rem 2.5rem;
+          color: #0f172a;
           font-size: 0.875rem;
           outline: none;
           transition: all 0.2s;
         }
         .auth-input:focus {
-          border-color: var(--primary-500);
-          box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+          border-color: #2563eb;
+          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        }
+
+        .password-toggle-btn {
+          position: absolute;
+          right: 0.875rem;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #94a3b8;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+        }
+        .password-toggle-btn:hover {
+          color: #475569;
         }
 
         .btn-auth-submit {
-          background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+          background: #2563eb;
           color: #ffffff;
           border: none;
           padding: 0.875rem;
@@ -239,82 +310,53 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           gap: 0.5rem;
-          box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
           transition: all 0.2s;
           margin-top: 0.5rem;
         }
         .btn-auth-submit:hover {
+          background: #1d4ed8;
           transform: translateY(-1px);
-          box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+          box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
         }
         .btn-auth-submit:disabled {
           opacity: 0.6;
           cursor: not-allowed;
         }
 
-        .demo-toggle-container {
-          margin-top: 2rem;
-          border-top: 1px solid rgba(255,255,255,0.05);
-          padding-top: 1.5rem;
+        .auth-footer-link {
+          display: block;
           text-align: center;
-        }
-        .btn-demo-toggle {
+          font-size: 0.875rem;
+          color: #2563eb;
+          text-decoration: none;
+          margin-top: 1.25rem;
+          font-weight: 500;
           background: none;
           border: none;
-          color: var(--primary-400);
-          font-size: 0.8125rem;
-          font-weight: 600;
           cursor: pointer;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.375rem;
         }
-        .btn-demo-toggle:hover {
-          color: var(--primary-300);
+        .auth-footer-link:hover {
           text-decoration: underline;
+          color: #1d4ed8;
         }
-        
-        .demo-list {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          margin-top: 1rem;
-          text-align: left;
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
         }
-        .demo-item {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.625rem 0.875rem;
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 8px;
-          background: rgba(255, 255, 255, 0.02);
-          cursor: pointer;
-          transition: all 0.15s ease;
-          width: 100%;
-        }
-        .demo-item:hover {
-          background: rgba(255, 255, 255, 0.06);
-          border-color: rgba(255, 255, 255, 0.1);
-        }
-        .demo-avatar {
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 700;
-          font-size: 0.75rem;
-        }
-        .demo-role-name {
-          font-weight: 600;
-          font-size: 0.8125rem;
-          color: #f8fafc;
-        }
-        .demo-email {
-          font-size: 0.6875rem;
-          color: #94a3b8;
+
+        /* Responsive styling */
+        @media (max-width: 900px) {
+          .auth-split-card {
+            grid-template-columns: 1fr;
+            max-width: 480px;
+          }
+          .auth-animation-panel {
+            display: none;
+          }
+          .auth-form-panel {
+            padding: 3rem 2rem;
+          }
         }
       `}</style>
 
@@ -324,156 +366,197 @@ export default function LoginPage() {
       </button>
 
       {/* Auth Card */}
-      <div className="auth-card">
-        <div className="auth-logo-box">
-          <div className="auth-logo-icon">
-            <Briefcase size={18} color="#fff" strokeWidth={2.5} />
+      <div className="auth-split-card">
+        {/* Left Side: Video Animation */}
+        <div className="auth-animation-panel">
+          <div className="auth-video-wrapper">
+            <video 
+              src={animationVideo} 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className="auth-video-element"
+            />
           </div>
-          <span className="auth-logo-text">WorkFlow Hub</span>
         </div>
 
-        {/* Tab switcher */}
-        <div className="auth-tabs">
-          <button 
-            className={`auth-tab-btn ${activeTab === 'login' ? 'active' : ''}`}
-            onClick={() => setActiveTab('login')}
-          >
-            Sign In
-          </button>
-          <button 
-            className={`auth-tab-btn ${activeTab === 'signup' ? 'active' : ''}`}
-            onClick={() => setActiveTab('signup')}
-          >
-            Sign Up
-          </button>
-        </div>
-
-        {/* Sign In form */}
-        {activeTab === 'login' ? (
-          <form onSubmit={handleLoginSubmit} className="auth-form">
-            <div className="auth-input-group">
-              <label className="auth-label">Email Address</label>
-              <div className="auth-input-wrapper">
-                <Mail size={16} className="auth-icon" />
-                <input 
-                  type="email" 
-                  className="auth-input" 
-                  placeholder="name@company.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required 
-                />
-              </div>
+        {/* Right Side: Authentication Forms */}
+        <div className="auth-form-panel">
+          <div className="auth-header">
+            <div className="auth-avatar-circle">
+              <User size={36} color="#ffffff" fill="#ffffff" />
             </div>
+            <span className="auth-title">
+              {activeTab === 'login' ? 'Login' : 'Sign Up'}
+            </span>
+          </div>
 
-            <div className="auth-input-group">
-              <label className="auth-label">Password</label>
-              <div className="auth-input-wrapper">
-                <Lock size={16} className="auth-icon" />
-                <input 
-                  type="password" 
-                  className="auth-input" 
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required 
-                />
-              </div>
-            </div>
-
-            <button type="submit" className="btn-auth-submit" disabled={loading}>
-              {loading ? (
-                <>
-                  <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                  Signing in...
-                </>
-              ) : (
-                <>
-                  Sign In <ArrowRight size={16} />
-                </>
-              )}
+          {/* Tab switcher */}
+          <div className="auth-tabs">
+            <button 
+              className={`auth-tab-btn ${activeTab === 'login' ? 'active' : ''}`}
+              onClick={() => setActiveTab('login')}
+            >
+              Sign In
             </button>
-          </form>
-        ) : (
-          /* Sign Up form */
-          <form onSubmit={handleSignUpSubmit} className="auth-form">
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <button 
+              className={`auth-tab-btn ${activeTab === 'signup' ? 'active' : ''}`}
+              onClick={() => setActiveTab('signup')}
+            >
+              Sign Up
+            </button>
+          </div>
+
+          {/* Sign In form */}
+          {activeTab === 'login' ? (
+            <form onSubmit={handleLoginSubmit} className="auth-form">
               <div className="auth-input-group">
-                <label className="auth-label">First Name</label>
+                <label className="auth-label">Email Address</label>
                 <div className="auth-input-wrapper">
-                  <User size={16} className="auth-icon" />
+                  <Mail size={16} className="auth-icon" />
                   <input 
-                    type="text" 
+                    type="email" 
                     className="auth-input" 
-                    placeholder="Jane"
-                    value={firstName}
-                    onChange={e => setFirstName(e.target.value)}
+                    placeholder="Username"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
                     required 
-                    style={{ paddingLeft: '2.25rem' }}
                   />
                 </div>
               </div>
+
               <div className="auth-input-group">
-                <label className="auth-label">Last Name</label>
+                <label className="auth-label">Password</label>
                 <div className="auth-input-wrapper">
-                  <User size={16} className="auth-icon" />
+                  <Lock size={16} className="auth-icon" />
                   <input 
-                    type="text" 
+                    type={showPassword ? "text" : "password"} 
                     className="auth-input" 
-                    placeholder="Doe"
-                    value={lastName}
-                    onChange={e => setLastName(e.target.value)}
+                    placeholder="Password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
                     required 
-                    style={{ paddingLeft: '2.25rem' }}
+                  />
+                  <button 
+                    type="button" 
+                    className="password-toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" className="btn-auth-submit" disabled={loading}>
+                {loading ? (
+                  <>
+                    <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    Log In <ArrowRight size={16} />
+                  </>
+                )}
+              </button>
+              
+              <button 
+                type="button" 
+                className="auth-footer-link"
+                onClick={() => navigate('/')}
+              >
+                Forget an password?
+              </button>
+            </form>
+          ) : (
+            /* Sign Up form */
+            <form onSubmit={handleSignUpSubmit} className="auth-form">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="auth-input-group">
+                  <label className="auth-label">First Name</label>
+                  <div className="auth-input-wrapper">
+                    <User size={16} className="auth-icon" />
+                    <input 
+                      type="text" 
+                      className="auth-input" 
+                      placeholder="Jane"
+                      value={firstName}
+                      onChange={e => setFirstName(e.target.value)}
+                      required 
+                      style={{ paddingLeft: '2.25rem' }}
+                    />
+                  </div>
+                </div>
+                <div className="auth-input-group">
+                  <label className="auth-label">Last Name</label>
+                  <div className="auth-input-wrapper">
+                    <User size={16} className="auth-icon" />
+                    <input 
+                      type="text" 
+                      className="auth-input" 
+                      placeholder="Doe"
+                      value={lastName}
+                      onChange={e => setLastName(e.target.value)}
+                      required 
+                      style={{ paddingLeft: '2.25rem' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="auth-input-group">
+                <label className="auth-label">Email Address</label>
+                <div className="auth-input-wrapper">
+                  <Mail size={16} className="auth-icon" />
+                  <input 
+                    type="email" 
+                    className="auth-input" 
+                    placeholder="name@company.com"
+                    value={signUpEmail}
+                    onChange={e => setSignUpEmail(e.target.value)}
+                    required 
                   />
                 </div>
               </div>
-            </div>
 
-            <div className="auth-input-group">
-              <label className="auth-label">Email Address</label>
-              <div className="auth-input-wrapper">
-                <Mail size={16} className="auth-icon" />
-                <input 
-                  type="email" 
-                  className="auth-input" 
-                  placeholder="name@company.com"
-                  value={signUpEmail}
-                  onChange={e => setSignUpEmail(e.target.value)}
-                  required 
-                />
+              <div className="auth-input-group">
+                <label className="auth-label">Password</label>
+                <div className="auth-input-wrapper">
+                  <Lock size={16} className="auth-icon" />
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    className="auth-input" 
+                    placeholder="At least 6 characters"
+                    value={signUpPassword}
+                    onChange={e => setSignUpPassword(e.target.value)}
+                    required 
+                  />
+                  <button 
+                    type="button" 
+                    className="password-toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div className="auth-input-group">
-              <label className="auth-label">Password</label>
-              <div className="auth-input-wrapper">
-                <Lock size={16} className="auth-icon" />
-                <input 
-                  type="password" 
-                  className="auth-input" 
-                  placeholder="At least 6 characters"
-                  value={signUpPassword}
-                  onChange={e => setSignUpPassword(e.target.value)}
-                  required 
-                />
-              </div>
-            </div>
-
-            <button type="submit" className="btn-auth-submit" disabled={loading}>
-              {loading ? (
-                <>
-                  <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                  Creating account...
-                </>
-              ) : (
-                <>
-                  Create Account <CheckCircle2 size={16} />
-                </>
-              )}
-            </button>
-          </form>
-        )}
+              <button type="submit" className="btn-auth-submit" disabled={loading}>
+                {loading ? (
+                  <>
+                    <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                    Creating account...
+                  </>
+                ) : (
+                  <>
+                    Create Account <CheckCircle2 size={16} />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );
