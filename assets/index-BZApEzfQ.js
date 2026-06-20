@@ -291,9 +291,10 @@ to {
         }
 
         .auth-video-element {
-          width: 100%;
+          width: 135%;
           height: 100%;
           object-fit: cover;
+          object-position: left center;
           display: block;
         }
 
@@ -650,9 +651,11 @@ to {
           letter-spacing: -0.02em;
           max-width: 900px;
           margin-bottom: 1.5rem;
+          color: #0f172a;
           background: linear-gradient(to bottom, #0f172a 60%, #334155 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          background-clip: text;
         }
         .hero-subtitle {
           color: #475569;
