@@ -118,6 +118,8 @@ export const useAuthStore = create((set, get) => ({
       // If the email confirmation is turned off, the session is active immediately
       if (data.session) {
         await get().fetchUserProfile(data.user.id);
+      } else {
+        set({ loading: false });
       }
       return data;
     } catch (e) {
