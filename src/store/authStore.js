@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabaseClient';
+import { toast } from 'react-hot-toast';
 
 export const useAuthStore = create((set, get) => ({
   currentUser: null,
