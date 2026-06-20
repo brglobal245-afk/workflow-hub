@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabaseClient';
-import { toast } from 'react-hot-toast';
 
 export const useAuthStore = create((set, get) => ({
   currentUser: null,
@@ -119,9 +118,6 @@ export const useAuthStore = create((set, get) => ({
       // If the email confirmation is turned off, the session is active immediately
       if (data.session) {
         await get().fetchUserProfile(data.user.id);
-      } else {
-        // If confirmation is active, they will receive an email verification link
-        toast.success('Registration successful! Please check your email for confirmation.');
       }
       return data;
     } catch (e) {

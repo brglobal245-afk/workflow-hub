@@ -65,8 +65,12 @@ export default function LoginPage() {
     }
     setLoading(true);
     try {
-      await register(signUpEmail, signUpPassword, firstName, lastName);
-      toast.success('Account created successfully!');
+      const res = await register(signUpEmail, signUpPassword, firstName, lastName);
+      if (res?.session) {
+        toast.success('Account created successfully!');
+      } else {
+        toast.success('Registration successful! Please check your email for confirmation.');
+      }
     } catch (err) {
       console.error(err);
       toast.error(err.message || 'Failed to create account.');
