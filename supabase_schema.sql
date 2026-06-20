@@ -321,3 +321,30 @@ INSERT INTO tasks (title, description, priority, status, progress, deadline, cre
 ('Migrate Database to Supabase', 'Set up tables, RLS policy structures, trigger mechanisms, and seeds.', 'critical', 'in_progress', 40, '2026-06-30', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a1', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a2', NULL, 'd1'),
 ('Design Landing Page Layout', 'Build wireframes, configure color schemes, and write basic styles.', 'medium', 'completed', 100, '2026-06-15', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a3', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a5', 't1', 'd1'),
 ('Update Employee Handbook', 'Review policy drafts, check security rules, and submit handbook updates.', 'low', 'not_started', 0, '2026-07-10', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a4', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a4', 't4', 'd2');
+
+-- ============================================================
+-- Automated Profile Generation trigger (handles Sign Up cleanly)
+-- ============================================================
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.employees (id, first_name, last_name, email, employee_id, role_id, position, status, joining_date, avatar_url)
+  VALUES (
+    new.id,
+    COALESCE(new.raw_user_meta_data->>'first_name', 'New'),
+    COALESCE(new.raw_user_meta_data->>'last_name', 'Employee'),
+    new.email,
+    'ACM-' || floor(random() * 9000 + 1000)::text,
+    'r7', -- Default role is 'Employee'
+    'New Employee',
+    'active',
+    to_char(now(), 'YYYY-MM-DD'),
+    'blue'
+  );
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();

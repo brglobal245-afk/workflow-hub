@@ -105,29 +105,23 @@ export const useAuthStore = create((set, get) => ({
       const { data, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName
+          }
+        }
       });
       if (authError) throw authError;
       if (!data?.user) throw new Error('User creation failed.');
 
-      const { error: profileError } = await supabase.from('employees').insert({
-        id: data.user.id,
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        employee_id: `ACM-${Math.floor(1000 + Math.random() * 9000)}`,
-        role_id: 'r7', // Default to Employee role
-        position: 'New Employee',
-        joining_date: new Date().toISOString().split('T')[0],
-        status: 'active',
-        avatar_url: 'blue',
-      });
-
-      if (profileError) {
-        console.error('Error creating profile row:', profileError);
-        throw profileError;
+      // If the email confirmation is turned off, the session is active immediately
+      if (data.session) {
+        await get().fetchUserProfile(data.user.id);
+      } else {
+        // If confirmation is active, they will receive an email verification link
+        toast.success('Registration successful! Please check your email for confirmation.');
       }
-
-      await get().fetchUserProfile(data.user.id);
       return data;
     } catch (e) {
       set({ loading: false });
