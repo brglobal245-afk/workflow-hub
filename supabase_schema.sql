@@ -217,9 +217,10 @@ CREATE POLICY "Allow all read" ON teams FOR SELECT TO authenticated USING (true)
 CREATE POLICY "Allow write" ON teams FOR ALL TO authenticated USING (true);
 
 ALTER TABLE employees ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow all read" ON employees FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow self update" ON employees FOR UPDATE TO authenticated USING (true);
-CREATE POLICY "Allow write" ON employees FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow all read" ON employees FOR SELECT USING (true);
+CREATE POLICY "Allow all insert" ON employees FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow all update" ON employees FOR UPDATE USING (true);
+CREATE POLICY "Allow all delete" ON employees FOR DELETE USING (true);
 
 ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow read" ON tasks FOR SELECT TO authenticated USING (true);
