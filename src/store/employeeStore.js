@@ -30,7 +30,8 @@ export const mapEmployeeToDb = (e) => {
   if (e.firstName !== undefined) dbObj.first_name = e.firstName;
   if (e.lastName !== undefined) dbObj.last_name = e.lastName;
   if (e.email !== undefined) dbObj.email = e.email;
-  if (e.employeeId !== undefined) dbObj.employee_id = e.employeeId;
+  // Always provide or generate employee_id to satisfy not-null constraint on insert
+  dbObj.employee_id = e.employeeId || ('ACM-' + Math.floor(Math.random() * 9000 + 1000));
   if (e.phone !== undefined) dbObj.phone = e.phone;
   if (e.departmentId !== undefined) dbObj.department_id = e.departmentId;
   if (e.teamId !== undefined) dbObj.team_id = e.teamId;
