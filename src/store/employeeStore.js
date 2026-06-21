@@ -26,25 +26,25 @@ export const mapEmployeeFromDb = (e) => {
 };
 
 export const mapEmployeeToDb = (e) => {
-  return {
-    first_name: e.firstName,
-    last_name: e.lastName,
-    email: e.email,
-    employee_id: e.employeeId || ('ACM-' + Math.floor(Math.random() * 9000 + 1000)),
-    phone: e.phone,
-    department_id: e.departmentId,
-    team_id: e.teamId,
-    manager_id: e.managerId,
-    role_id: e.roleId,
-    joining_date: e.joiningDate,
-    type: e.employmentType || 'Full Time',
-    status: e.status || 'active',
-    avatar_url: e.avatarColor || 'blue',
-    bio: e.bio,
-    skills: e.skills || [],
-    position: e.position,
-    location: e.location,
-  };
+  const dbObj = {};
+  if (e.firstName !== undefined) dbObj.first_name = e.firstName;
+  if (e.lastName !== undefined) dbObj.last_name = e.lastName;
+  if (e.email !== undefined) dbObj.email = e.email;
+  if (e.employeeId !== undefined) dbObj.employee_id = e.employeeId;
+  if (e.phone !== undefined) dbObj.phone = e.phone;
+  if (e.departmentId !== undefined) dbObj.department_id = e.departmentId;
+  if (e.teamId !== undefined) dbObj.team_id = e.teamId;
+  if (e.managerId !== undefined) dbObj.manager_id = e.managerId;
+  if (e.roleId !== undefined) dbObj.role_id = e.roleId;
+  if (e.joiningDate !== undefined) dbObj.joining_date = e.joiningDate;
+  if (e.employmentType !== undefined) dbObj.type = e.employmentType;
+  if (e.status !== undefined) dbObj.status = e.status;
+  if (e.avatarColor !== undefined) dbObj.avatar_url = e.avatarColor;
+  if (e.bio !== undefined) dbObj.bio = e.bio;
+  if (e.skills !== undefined) dbObj.skills = e.skills;
+  if (e.position !== undefined) dbObj.position = e.position;
+  if (e.location !== undefined) dbObj.location = e.location;
+  return dbObj;
 };
 
 export const useEmployeeStore = create((set, get) => ({

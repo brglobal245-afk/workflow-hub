@@ -35,6 +35,15 @@ export const useAuthStore = create((set, get) => ({
 
   fetchUserProfile: async (userId) => {
     try {
+      let roles = get().roles;
+      if (!roles || roles.length === 0) {
+        const { data: rolesData } = await supabase.from('roles').select('*');
+        if (rolesData) {
+          set({ roles: rolesData });
+          roles = rolesData;
+        }
+      }
+
       const { data: employee, error } = await supabase
         .from('employees')
         .select('*')
@@ -47,7 +56,6 @@ export const useAuthStore = create((set, get) => ({
       }
 
       // Compute permissions based on roles
-      const roles = get().roles;
       const userRole = roles.find(r => r.id === employee.role_id);
       const permissions = userRole ? new Set(userRole.permissions) : new Set();
 
