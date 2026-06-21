@@ -90,7 +90,7 @@ export default function EmployeeDirectory() {
         location: 'San Francisco, CA',
         avatarColor: 'blue',
       });
-      toast.success('Employee created successfully! Password set to Password123!');
+      toast.success('Employee created successfully! A password setup link has been sent to their email.');
       setShowAddModal(false);
       // Reset
       setFirstName('');

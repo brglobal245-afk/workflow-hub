@@ -47,6 +47,15 @@ export const mapEmployeeToDb = (e) => {
   return dbObj;
 };
 
+const generateRandomPassword = () => {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+  let pass = '';
+  for (let i = 0; i < 12; i++) {
+    pass += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return pass;
+};
+
 export const useEmployeeStore = create((set, get) => ({
   employees: [],
   loading: false,
@@ -81,27 +90,11 @@ export const useEmployeeStore = create((set, get) => ({
   addEmployee: async (employee) => {
     set({ loading: true });
     try {
-      // Create user profile in auth first or register user. 
-      // Note: In Supabase, if auth user creation is managed, we insert employee profile.
-      // For this workflow hub, we will insert into employees. Since the id references auth.users(id), 
-      // we must have an auth user. If it's a new employee, we can invite them via Supabase auth, 
-      // or for testing convenience, we generate a random UUID or link it to a created user session.
-      // We will generate a random UUID and insert it. (Note: in production, auth user creation trigger
-      // would populate this, or we call a backend API. For local developer flow, inserting directly
-      // requires a valid UUID, so we can generate one. If there is a foreign key, we can insert into auth first).
-      // Wait, in our schema: `id UUID PRIMARY KEY REFERENCES auth.users(id)`. If the database schema has RLS/FK, 
-      // it requires user to exist in auth.users.
-      // For quick additions in demo environment, we can check if they are in auth or insert them.
-      // Let's create user via supabase.auth.signUp or similar if needed. For enterprise admins adding employees, 
-      // since supabase.auth.signUp is client side, they can sign up the user, or if we want it to be seamless:
-      // we can make a call or fall back.
-      // Actually, we can do supabase.auth.signUp with a random password! This creates the auth.user and returns its ID,
-      // which we then use to insert the employee profile! That is extremely clean and matches production Supabase workflows!
       const tempSupabase = createTempClient();
-      const password = 'Password123!'; // Default password for new signups
+      const randomPassword = generateRandomPassword();
       const { data: signUpData, error: signUpError } = await tempSupabase.auth.signUp({
         email: employee.email,
-        password: password,
+        password: randomPassword,
         options: {
           data: {
             first_name: employee.firstName,
@@ -114,6 +107,14 @@ export const useEmployeeStore = create((set, get) => ({
 
       const newUserId = signUpData.user?.id;
       if (!newUserId) throw new Error('Failed to create auth user');
+
+      // Send password setup link to their email immediately
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(employee.email, {
+        redirectTo: window.location.origin + window.location.pathname + '#/login'
+      });
+      if (resetError) {
+        console.warn('Could not send password reset email automatically:', resetError);
+      }
 
       const empData = {
         ...mapEmployeeToDb(employee),

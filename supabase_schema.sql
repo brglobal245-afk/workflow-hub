@@ -290,37 +290,7 @@ INSERT INTO teams (id, department_id, name, leader_id, color, description) VALUE
 ('t5', 'd3', 'Content & Brand', NULL, '#8b5cf6', 'Content creation and brand strategy'),
 ('t6', 'd4', 'Enterprise Sales', NULL, '#10b981', 'B2B sales and enterprise accounts');
 
--- ============================================================
--- Seeding Auth Users in Supabase
--- Note: Encrypted passwords are all "Password123!" using standard bcrypt salt
--- ============================================================
-INSERT INTO auth.users (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at) VALUES
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a1', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'alexandra.chen@acmetech.com', crypt('Password123!', gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}', '{}', now(), now()),
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a2', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'marcus.rodriguez@acmetech.com', crypt('Password123!', gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}', '{}', now(), now()),
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a3', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'sarah.kim@acmetech.com', crypt('Password123!', gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}', '{}', now(), now()),
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a4', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'priya.sharma@acmetech.com', crypt('Password123!', gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}', '{}', now(), now()),
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a5', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'james.patel@acmetech.com', crypt('Password123!', gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}', '{}', now(), now());
 
--- ============================================================
--- Seeding Employee Profiles linking to Auth Users
--- ============================================================
-INSERT INTO employees (id, first_name, last_name, email, employee_id, department_id, team_id, role_id, manager_id, status, type, joining_date, phone, avatar_url, skills, bio, position, location) VALUES
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a1', 'Alexandra', 'Chen', 'alexandra.chen@acmetech.com', 'ACM-001', NULL, NULL, 'r1', NULL, 'active', 'Full Time', '2019-01-15', '+1 (555) 001-0001', 'blue', ARRAY['React', 'Architecture', 'Strategy'], 'Founder and Chief Architect. Building the future of workplace management.', 'Organization Administrator', 'San Francisco, CA'),
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a2', 'Marcus', 'Rodriguez', 'marcus.rodriguez@acmetech.com', 'ACM-002', 'd1', 't3', 'r2', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a1', 'active', 'Full Time', '2019-03-01', '+1 (555) 001-0002', 'green', ARRAY['Cloud', 'Kubernetes', 'Leadership'], 'Engineering Department Head. Dedicated to robust and scalable architectures.', 'VP of Engineering', 'San Francisco, CA'),
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a3', 'Sarah', 'Kim', 'sarah.kim@acmetech.com', 'ACM-003', 'd1', 't1', 'r4', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a2', 'active', 'Full Time', '2020-06-15', '+1 (555) 001-0003', 'purple', ARRAY['Javascript', 'CSS', 'UI/UX'], 'Frontend Team Lead. Design system enthusiast and user experience advocate.', 'Frontend Team Lead', 'Austin, TX'),
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a4', 'Priya', 'Sharma', 'priya.sharma@acmetech.com', 'ACM-006', 'd2', 't4', 'r5', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a1', 'active', 'Full Time', '2019-08-20', '+1 (555) 001-0006', 'pink', ARRAY['Sourcing', 'Employee Relations', 'HR Tech'], 'HR Manager. Passionate about company culture and employee growth.', 'HR Manager', 'San Francisco, CA'),
-('e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a5', 'James', 'Patel', 'james.patel@acmetech.com', 'ACM-004', 'd1', 't1', 'r6', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a3', 'active', 'Full Time', '2021-02-01', '+1 (555) 001-0004', 'orange', ARRAY['React', 'HTML', 'Git'], 'Software Engineer. Building modular UI components and core platform features.', 'Senior Frontend Engineer', 'New York, NY');
-
--- Link head/leader IDs
-UPDATE departments SET head_id = 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a2' WHERE id = 'd1';
-UPDATE departments SET head_id = 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a4' WHERE id = 'd2';
-UPDATE teams SET leader_id = 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a3' WHERE id = 't1';
-
--- Seeding Tasks
-INSERT INTO tasks (title, description, priority, status, progress, deadline, creator_id, assignee_id, team_id, department_id) VALUES
-('Migrate Database to Supabase', 'Set up tables, RLS policy structures, trigger mechanisms, and seeds.', 'critical', 'in_progress', 40, '2026-06-30', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a1', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a2', NULL, 'd1'),
-('Design Landing Page Layout', 'Build wireframes, configure color schemes, and write basic styles.', 'medium', 'completed', 100, '2026-06-15', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a3', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a5', 't1', 'd1'),
-('Update Employee Handbook', 'Review policy drafts, check security rules, and submit handbook updates.', 'low', 'not_started', 0, '2026-07-10', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a4', 'e2a9b2b5-5c1a-4d7a-8fbb-57ffec2882a4', 't4', 'd2');
 
 -- ============================================================
 -- Automated Profile Generation trigger (handles Sign Up cleanly)
