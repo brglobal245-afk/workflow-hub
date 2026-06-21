@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mail, Phone, MapPin, Calendar, Briefcase, Users } from 'lucide-react';
 import { useEmployeeStore } from '../../store/employeeStore';
@@ -7,6 +7,7 @@ import { useOrgStore } from '../../store/orgStore';
 import { useAuthStore } from '../../store/authStore';
 import { usePerformanceStore } from '../../store/performanceStore';
 import Avatar from '../../components/common/Avatar';
+import toast from 'react-hot-toast';
 
 const EMP_TYPES = { full_time: 'Full Time', part_time: 'Part Time', contract: 'Contract', freelancer: 'Freelancer', intern: 'Intern' };
 const STATUS_BADGE = { active: 'success', on_leave: 'warning', suspended: 'danger', resigned: 'gray' };
@@ -14,11 +15,12 @@ const STATUS_BADGE = { active: 'success', on_leave: 'warning', suspended: 'dange
 export default function EmployeeProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getEmployee } = useEmployeeStore();
+  const { getEmployee, deleteEmployee } = useEmployeeStore();
   const { getTasksByAssignee } = useTaskStore();
   const { departments, teams } = useOrgStore();
-  const { roles } = useAuthStore();
+  const { roles, hasPermission, currentUser } = useAuthStore();
   const { goals } = usePerformanceStore();
+  const [deleting, setDeleting] = useState(false);
   const emp = getEmployee(id);
 
   if (!emp) return (
@@ -37,16 +39,44 @@ export default function EmployeeProfile() {
 
   const STATUS_COLORS = { not_started: '#94a3b8', in_progress: '#4f46e5', under_review: '#f59e0b', completed: '#22c55e', rejected: '#ef4444' };
 
+  const canDelete = hasPermission('delete_user') && emp.id !== currentUser?.id;
+
+  const handleDelete = async () => {
+    if (window.confirm(`Are you sure you want to remove ${emp.firstName} ${emp.lastName} from the organization? This will revoke all system access.`)) {
+      setDeleting(true);
+      try {
+        await deleteEmployee(emp.id);
+        toast.success('Employee removed successfully.');
+        navigate('/employees');
+      } catch (e) {
+        console.error(e);
+        toast.error(`Failed to remove employee: ${e.message}`);
+        setDeleting(false);
+      }
+    }
+  };
+
   return (
     <div className="animate-fade-in-up">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-        <button className="btn btn-ghost btn-icon" onClick={() => navigate(-1)}>
-          <ArrowLeft size={18} />
-        </button>
-        <span style={{ color: 'var(--gray-400)', fontSize: '0.875rem' }}>
-          <span style={{ cursor: 'pointer', color: 'var(--primary-600)' }} onClick={() => navigate('/employees')}>Employees</span>
-          {' / '}{emp.firstName} {emp.lastName}
-        </span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <button className="btn btn-ghost btn-icon" onClick={() => navigate(-1)}>
+            <ArrowLeft size={18} />
+          </button>
+          <span style={{ color: 'var(--gray-400)', fontSize: '0.875rem' }}>
+            <span style={{ cursor: 'pointer', color: 'var(--primary-600)' }} onClick={() => navigate('/employees')}>Employees</span>
+            {' / '}{emp.firstName} {emp.lastName}
+          </span>
+        </div>
+        {canDelete && (
+          <button 
+            className="btn btn-danger btn-sm" 
+            onClick={handleDelete} 
+            disabled={deleting}
+          >
+            {deleting ? 'Removing...' : 'Remove Employee'}
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-12 gap-5">

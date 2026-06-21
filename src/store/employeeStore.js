@@ -168,6 +168,26 @@ export const useEmployeeStore = create((set, get) => ({
     await get().updateEmployee(id, { status: 'suspended' });
   },
 
+  deleteEmployee: async (id) => {
+    set({ loading: true });
+    try {
+      const { error } = await supabase
+        .from('employees')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      set(state => ({
+        employees: state.employees.filter(e => e.id !== id),
+        loading: false,
+      }));
+    } catch (e) {
+      console.error('Error deleting employee:', e);
+      set({ loading: false });
+      throw e;
+    }
+  },
+
   getFullName: (id) => {
     const emp = get().employees.find(e => e.id === id);
     return emp ? `${emp.firstName} ${emp.lastName}` : 'Unknown';
