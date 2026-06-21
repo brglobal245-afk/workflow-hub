@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Pin, Eye, Paperclip } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useEmployeeStore } from '../../store/employeeStore';
 import { useAnnouncementStore } from '../../store/announcementStore';
 import Avatar from '../../components/common/Avatar';
+import { supabase } from '../../lib/supabaseClient';
 import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
 
@@ -18,10 +19,30 @@ const TYPE_INFO = {
 export default function AnnouncementsPage() {
   const { currentUser, hasPermission } = useAuthStore();
   const { employees } = useEmployeeStore();
-  const { announcements, createAnnouncement } = useAnnouncementStore();
+  const { announcements, createAnnouncement, fetchAnnouncements } = useAnnouncementStore();
   const [activeType, setActiveType] = useState('all');
   const [showCreate, setShowCreate] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  // Mount/polling/realtime fetch
+  useEffect(() => {
+    fetchAnnouncements();
+    const interval = setInterval(() => {
+      fetchAnnouncements();
+    }, 15000);
+
+    const channel = supabase
+      .channel('realtime:announcements')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, () => {
+        fetchAnnouncements();
+      })
+      .subscribe();
+
+    return () => {
+      clearInterval(interval);
+      supabase.removeChannel(channel);
+    };
+  }, [fetchAnnouncements]);
 
   // Form states
   const [title, setTitle] = useState('');
@@ -45,6 +66,7 @@ export default function AnnouncementsPage() {
   const relTime = (iso) => {
     try {
       const diff = Date.now() - new Date(iso).getTime();
+      if (isNaN(diff)) return '';
       const hours = Math.floor(diff / 3600000);
       if (hours < 1) return 'Just now';
       if (hours < 24) return `${hours} hours ago`;

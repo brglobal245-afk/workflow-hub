@@ -4,10 +4,13 @@ import { useMessageStore } from '../../store/messageStore';
 import { useAuthStore } from '../../store/authStore';
 import { useEmployeeStore } from '../../store/employeeStore';
 import Avatar from '../../components/common/Avatar';
+import Modal from '../../components/common/Modal';
+import { supabase } from '../../lib/supabaseClient';
 
 const relTime = (iso) => {
   try {
     const diff = Date.now() - new Date(iso).getTime();
+    if (isNaN(diff)) return '';
     const mins = Math.floor(diff / 60000);
     if (mins < 1) return 'now';
     if (mins < 60) return `${mins}m`;
@@ -20,16 +23,38 @@ const relTime = (iso) => {
 export default function MessagingPage() {
   const { currentUser } = useAuthStore();
   const { employees } = useEmployeeStore();
-  const { getConversationList, getConversation, sendMessage, markAsRead } = useMessageStore();
+  const { getConversationList, getConversation, sendMessage, markAsRead, fetchMessages } = useMessageStore();
   const [search, setSearch] = useState('');
   const [activePartnerId, setActivePartnerId] = useState(null);
   const [message, setMessage] = useState('');
   const messagesEndRef = useRef(null);
+  const [showNewMsgModal, setShowNewMsgModal] = useState(false);
+  const [newMsgSearch, setNewMsgSearch] = useState('');
 
   const conversations = getConversationList(currentUser?.id);
 
   const partner = activePartnerId ? employees.find(e => e.id === activePartnerId) : null;
   const messages = activePartnerId ? getConversation(currentUser?.id, activePartnerId) : [];
+
+  // Mount/polling/realtime fetch
+  useEffect(() => {
+    fetchMessages();
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 5000);
+
+    const channel = supabase
+      .channel('realtime:messages')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
+        fetchMessages();
+      })
+      .subscribe();
+
+    return () => {
+      clearInterval(interval);
+      supabase.removeChannel(channel);
+    };
+  }, [fetchMessages]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -63,7 +88,9 @@ export default function MessagingPage() {
     <div className="animate-fade-in-up">
       <div className="page-header mb-0" style={{ marginBottom: '1.25rem' }}>
         <h1 className="page-title">Messages</h1>
-        <button className="btn btn-primary btn-sm"><Plus size={15} /> New Message</button>
+        <button className="btn btn-primary btn-sm" onClick={() => setShowNewMsgModal(true)}>
+          <Plus size={15} /> New Message
+        </button>
       </div>
 
       <div className="chat-layout">
@@ -191,6 +218,56 @@ export default function MessagingPage() {
           )}
         </div>
       </div>
+
+      {/* New Message Modal */}
+      <Modal
+        isOpen={showNewMsgModal}
+        onClose={() => {
+          setShowNewMsgModal(false);
+          setNewMsgSearch('');
+        }}
+        title="New Message"
+        size="md"
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="search-bar" style={{ margin: 0 }}>
+            <Search size={14} color="var(--gray-400)" />
+            <input 
+              placeholder="Search employees..." 
+              value={newMsgSearch} 
+              onChange={e => setNewMsgSearch(e.target.value)} 
+            />
+          </div>
+          <div style={{ maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.5rem' }}>
+            {otherEmployees
+              .filter(emp => (emp.firstName + ' ' + emp.lastName).toLowerCase().includes(newMsgSearch.toLowerCase()))
+              .map(emp => (
+                <div 
+                  key={emp.id} 
+                  className="chat-item" 
+                  style={{ borderRadius: '8px', cursor: 'pointer', padding: '0.625rem', display: 'flex', alignItems: 'center' }}
+                  onClick={() => {
+                    setActivePartnerId(emp.id);
+                    setShowNewMsgModal(false);
+                    setNewMsgSearch('');
+                  }}
+                >
+                  <Avatar name={`${emp.firstName} ${emp.lastName}`} color={emp.avatarColor} size="sm" />
+                  <div style={{ flex: 1, marginLeft: '0.75rem' }}>
+                    <div style={{ fontWeight: 500, fontSize: '0.875rem', color: 'var(--gray-800)' }}>{emp.firstName} {emp.lastName}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--gray-500)' }}>{emp.position}</div>
+                  </div>
+                </div>
+              ))
+            }
+            {otherEmployees.filter(emp => (emp.firstName + ' ' + emp.lastName).toLowerCase().includes(newMsgSearch.toLowerCase())).length === 0 && (
+              <div style={{ padding: '1rem', textAlign: 'center', color: 'var(--gray-400)', fontSize: '0.875rem' }}>
+                No employees found.
+              </div>
+            )}
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
