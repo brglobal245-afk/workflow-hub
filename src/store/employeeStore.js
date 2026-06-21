@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase } from '../lib/supabaseClient';
+import { supabase, createTempClient } from '../lib/supabaseClient';
 
 export const mapEmployeeFromDb = (e) => {
   if (!e) return null;
@@ -30,7 +30,7 @@ export const mapEmployeeToDb = (e) => {
     first_name: e.firstName,
     last_name: e.lastName,
     email: e.email,
-    employee_id: e.employeeId,
+    employee_id: e.employeeId || ('ACM-' + Math.floor(Math.random() * 9000 + 1000)),
     phone: e.phone,
     department_id: e.departmentId,
     team_id: e.teamId,
@@ -97,8 +97,9 @@ export const useEmployeeStore = create((set, get) => ({
       // we can make a call or fall back.
       // Actually, we can do supabase.auth.signUp with a random password! This creates the auth.user and returns its ID,
       // which we then use to insert the employee profile! That is extremely clean and matches production Supabase workflows!
+      const tempSupabase = createTempClient();
       const password = 'Password123!'; // Default password for new signups
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      const { data: signUpData, error: signUpError } = await tempSupabase.auth.signUp({
         email: employee.email,
         password: password,
         options: {
@@ -121,7 +122,7 @@ export const useEmployeeStore = create((set, get) => ({
 
       const { data, error } = await supabase
         .from('employees')
-        .insert([empData])
+        .upsert([empData])
         .select()
         .single();
 

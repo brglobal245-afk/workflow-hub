@@ -15,3 +15,14 @@ if (isMissing) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export const createTempClient = () => {
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  });
+};
+
