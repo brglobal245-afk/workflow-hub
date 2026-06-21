@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Search, Plus, Grid, List, MoreVertical } from 'lucide-react';
 import { useEmployeeStore } from '../../store/employeeStore';
 import { useAuthStore } from '../../store/authStore';
@@ -22,6 +22,7 @@ export default function EmployeeDirectory() {
   const { hasPermission, roles } = useAuthStore();
   const { departments } = useOrgStore();
   const navigate = useNavigate();
+  const location = useLocation();
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState('list'); // grid | list
   const [filterDept, setFilterDept] = useState('');
@@ -29,6 +30,13 @@ export default function EmployeeDirectory() {
   const [filterType, setFilterType] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [sortBy, setSortBy] = useState('name');
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('add') === 'true' && hasPermission('create_user')) {
+      setShowAddModal(true);
+    }
+  }, [location, hasPermission]);
 
   // Form states
   const [firstName, setFirstName] = useState('');

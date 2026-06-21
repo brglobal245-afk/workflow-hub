@@ -9,7 +9,7 @@ export default function DashboardPage() {
   const { hasPermission, getAuthorityLevel } = useAuthStore();
   const level = getAuthorityLevel();
 
-  if (level >= 90) return <AdminDashboard />;
+  if (hasPermission('create_user') || level >= 90) return <AdminDashboard />;
   if (level >= 60) return <ManagerDashboard />;
   return <EmployeeDashboard />;
 }

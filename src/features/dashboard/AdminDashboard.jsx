@@ -12,6 +12,8 @@ import { useEmployeeStore } from '../../store/employeeStore';
 import { useTaskStore } from '../../store/taskStore';
 import { useLeaveStore } from '../../store/leaveStore';
 import { useOrgStore } from '../../store/orgStore';
+import { useAttendanceStore } from '../../store/attendanceStore';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '../../components/common/Avatar';
 
 const DEPT_COLORS = ['#4f46e5','#db2777','#7c3aed','#059669','#0891b2','#d97706'];
@@ -35,16 +37,22 @@ const ACTIVITY_FEED = [
 ];
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const { employees } = useEmployeeStore();
   const { tasks, getStats } = useTaskStore();
   const { requests: leaves } = useLeaveStore();
   const { departments, teams } = useOrgStore();
+  const { records: attendanceRecords } = useAttendanceStore();
   const taskStats = getStats();
 
   const activeEmployees = employees.filter(e => e.status === 'active').length;
   const onLeave = employees.filter(e => e.status === 'on_leave').length;
   const pendingLeaves = leaves.filter(l => l.status === 'pending').length;
   const criticalTasks = tasks.filter(t => t.priority === 'critical' && t.status !== 'completed').length;
+
+  const todayStr = new Date().toISOString().split('T')[0];
+  const inOfficeToday = attendanceRecords.filter(r => r.date === todayStr && r.type === 'office' && !r.checkOut).length;
+  const onLeaveToday = leaves.filter(l => l.status === 'approved' && todayStr >= l.startDate && todayStr <= l.endDate).length;
 
   const deptData = departments.map(d => ({
     name: d.name.slice(0, 4),
@@ -78,19 +86,18 @@ export default function AdminDashboard() {
           <button className="btn btn-secondary btn-sm">
             <BarChart2 size={15} /> Export Report
           </button>
-          <button className="btn btn-primary btn-sm">
+          <button className="btn btn-primary btn-sm" onClick={() => navigate('/employees?add=true')}>
             <Users size={15} /> Add Employee
           </button>
         </div>
       </div>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-4 gap-5 mb-6 stagger-children">
         {[
-          { label: 'Total Employees', value: employees.length, icon: Users, variant: 'primary', change: '+3', dir: 'up', sub: 'This quarter' },
-          { label: 'Active Today', value: activeEmployees, icon: UserCheck, variant: 'success', change: `${Math.round(activeEmployees/employees.length*100)}%`, dir: 'up', sub: 'Attendance rate' },
-          { label: 'Active Tasks', value: taskStats.in_progress + taskStats.under_review, icon: CheckSquare, variant: 'warning', change: `${criticalTasks} critical`, dir: 'down', sub: 'Across all teams' },
-          { label: 'Pending Leaves', value: pendingLeaves, icon: Calendar, variant: 'danger', change: 'Needs review', dir: 'down', sub: 'Awaiting approval' },
+          { label: 'Total Employees', value: employees.length, icon: Users, variant: 'primary', change: `${activeEmployees} active`, dir: 'up', sub: 'Registered members' },
+          { label: 'In Office Today', value: inOfficeToday, icon: UserCheck, variant: 'success', change: `${employees.length > 0 ? Math.round(inOfficeToday/employees.length*100) : 0}%`, dir: 'up', sub: 'Presence rate' },
+          { label: 'On Leave Today', value: onLeaveToday, icon: Calendar, variant: 'warning', change: `${pendingLeaves} pending`, dir: 'down', sub: 'Approved leave' },
+          { label: 'Pending Leaves', value: pendingLeaves, icon: Clock, variant: 'danger', change: 'Needs review', dir: 'down', sub: 'Awaiting approval' },
         ].map((card, i) => (
           <div key={i} className={`stat-card ${card.variant} animate-fade-in-up`} style={{ animationDelay: `${i * 0.08}s` }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
