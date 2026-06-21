@@ -25,7 +25,7 @@ export default function OnboardingOverlay() {
   const [lastName, setLastName] = useState(currentUser?.lastName || '');
   const [phone, setPhone] = useState(currentUser?.phone || '');
   const [position, setPosition] = useState('');
-  const [roleId, setRoleId] = useState('r1'); // Default to Org Admin to enable adding other members
+  const [roleId, setRoleId] = useState(currentUser?.roleId || 'r7');
   const [submitting, setSubmitting] = useState(false);
 
   const handleNext = () => {
@@ -496,9 +496,13 @@ export default function OnboardingOverlay() {
               <form onSubmit={handleSubmit} className="animate-fade-in">
                 <div className="onboarding-form-header">
                   <h2 className="onboarding-form-title">
-                    <Shield size={24} className="text-primary" /> Select your system role
+                    <Shield size={24} className="text-primary" /> {currentUser?.roleId === 'r1' ? 'Confirm your system role' : 'Your system role'}
                   </h2>
-                  <p className="onboarding-form-subtitle">Pick the authorization level that fits your responsibilities.</p>
+                  <p className="onboarding-form-subtitle">
+                    {currentUser?.roleId === 'r1' 
+                      ? 'Verify the administrative authorization level for your new organization.' 
+                      : 'Your role assigned by the organization configuration.'}
+                  </p>
                 </div>
                 <div className="onboarding-form-body">
                   <div className="form-group">
@@ -508,6 +512,7 @@ export default function OnboardingOverlay() {
                       value={roleId}
                       onChange={e => setRoleId(e.target.value)}
                       required
+                      disabled={currentUser?.roleId !== 'r1'}
                     >
                       {roles.map(r => (
                         <option key={r.id} value={r.id}>
@@ -515,6 +520,11 @@ export default function OnboardingOverlay() {
                         </option>
                       ))}
                     </select>
+                    {currentUser?.roleId !== 'r1' && (
+                      <span style={{ fontSize: '0.75rem', color: 'var(--warning-600)', marginTop: '0.25rem', display: 'block' }}>
+                        ⚠️ Role selection is locked for standard employees. Contact your admin to request promotions.
+                      </span>
+                    )}
                   </div>
 
                   {selectedRole && (

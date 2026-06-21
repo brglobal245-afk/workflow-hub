@@ -22,6 +22,11 @@ export default function LoginPage() {
   const [signUpEmail, setSignUpEmail] = useState('');
   const [signUpPassword, setSignUpPassword] = useState('');
   
+  // Organization setup fields
+  const [isCompanyOwner, setIsCompanyOwner] = useState(true);
+  const [companyName, setCompanyName] = useState('');
+  const [signUpOrgId, setSignUpOrgId] = useState('');
+  
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -61,13 +66,28 @@ export default function LoginPage() {
       toast.error('All fields are required.');
       return;
     }
+    if (isCompanyOwner && !companyName.trim()) {
+      toast.error('Company Name is required.');
+      return;
+    }
+    if (!isCompanyOwner && !signUpOrgId.trim()) {
+      toast.error('Organization ID is required.');
+      return;
+    }
     if (signUpPassword.length < 6) {
       toast.error('Password must be at least 6 characters.');
       return;
     }
     setLoading(true);
     try {
-      const res = await register(signUpEmail, signUpPassword, firstName, lastName);
+      const res = await register(
+        signUpEmail, 
+        signUpPassword, 
+        firstName, 
+        lastName,
+        isCompanyOwner ? companyName.trim() : null,
+        !isCompanyOwner ? signUpOrgId.trim() : null
+      );
       if (res?.session) {
         toast.success('Account created successfully!');
       } else {
@@ -519,6 +539,63 @@ export default function LoginPage() {
                   />
                 </div>
               </div>
+
+              {/* Organization selection */}
+              <div className="auth-input-group">
+                <label className="auth-label">Registration Type</label>
+                <div style={{ display: 'flex', gap: '1.5rem', marginTop: '0.25rem', marginBottom: '0.25rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#475569', fontWeight: 500, cursor: 'pointer' }}>
+                    <input 
+                      type="radio" 
+                      name="regType" 
+                      checked={isCompanyOwner} 
+                      onChange={() => setIsCompanyOwner(true)} 
+                    />
+                    Create New Organization
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.8125rem', color: '#475569', fontWeight: 500, cursor: 'pointer' }}>
+                    <input 
+                      type="radio" 
+                      name="regType" 
+                      checked={!isCompanyOwner} 
+                      onChange={() => setIsCompanyOwner(false)} 
+                    />
+                    Join Existing Organization
+                  </label>
+                </div>
+              </div>
+
+              {isCompanyOwner ? (
+                <div className="auth-input-group">
+                  <label className="auth-label">Company / Organization Name</label>
+                  <div className="auth-input-wrapper">
+                    <Briefcase size={16} className="auth-icon" />
+                    <input 
+                      type="text" 
+                      className="auth-input" 
+                      placeholder="e.g. Reliance, OYO"
+                      value={companyName}
+                      onChange={e => setCompanyName(e.target.value)}
+                      required={isCompanyOwner}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="auth-input-group">
+                  <label className="auth-label">Organization ID</label>
+                  <div className="auth-input-wrapper">
+                    <Briefcase size={16} className="auth-icon" />
+                    <input 
+                      type="text" 
+                      className="auth-input" 
+                      placeholder="e.g. ORG-123456"
+                      value={signUpOrgId}
+                      onChange={e => setSignUpOrgId(e.target.value)}
+                      required={!isCompanyOwner}
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="auth-input-group">
                 <label className="auth-label">Password</label>

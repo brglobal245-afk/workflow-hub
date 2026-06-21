@@ -10,6 +10,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useNotificationStore } from '../../store/notificationStore';
 import { PERMISSIONS } from '../../constants/permissions';
 import Avatar from '../common/Avatar';
+import toast from 'react-hot-toast';
 
 const NAV_ITEMS = [
   {
@@ -69,18 +70,39 @@ export default function Sidebar({ collapsed, onToggle, onClose }) {
     return hasPermission(item.permission);
   };
 
+  const handleCopyOrgId = (e) => {
+    e.stopPropagation();
+    if (currentUser?.orgId) {
+      navigator.clipboard.writeText(currentUser.orgId);
+      toast.success('Organization ID copied!');
+    }
+  };
+
   return (
     <aside className={`app-sidebar ${collapsed ? 'collapsed' : ''}`}>
       {/* Logo */}
-      <div className="sidebar-logo">
-        <div className="sidebar-logo-icon">
+      <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div className="sidebar-logo-icon" style={{ flexShrink: 0 }}>
           <Briefcase size={18} color="#fff" strokeWidth={2.5} />
         </div>
-        <span className="sidebar-logo-text">WorkFlow Hub</span>
+        {!collapsed && (
+          <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, flex: 1 }}>
+            <span className="sidebar-logo-text" style={{ fontSize: '0.875rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {currentUser?.orgName || 'WorkFlow Hub'}
+            </span>
+            <span 
+              onClick={handleCopyOrgId}
+              style={{ fontSize: '0.625rem', color: 'rgba(255,255,255,0.45)', cursor: 'pointer', userSelect: 'none', display: 'inline-block' }}
+              title="Click to copy Organization ID"
+            >
+              ID: {currentUser?.orgId || 'ORG-DEMO'} 📋
+            </span>
+          </div>
+        )}
         <button
           onClick={onToggle}
           style={{
-            marginLeft: 'auto', color: 'rgba(255,255,255,0.4)',
+            marginLeft: collapsed ? 'auto' : '0.5rem', color: 'rgba(255,255,255,0.4)',
             background: 'transparent', border: 'none', cursor: 'pointer',
             flexShrink: 0, display: 'flex', alignItems: 'center',
           }}

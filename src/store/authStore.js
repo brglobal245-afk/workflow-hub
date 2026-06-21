@@ -55,6 +55,19 @@ export const useAuthStore = create((set, get) => ({
         return;
       }
 
+      // Fetch organization details
+      let orgName = 'Acme Technologies';
+      if (employee.org_id) {
+        const { data: orgData } = await supabase
+          .from('organizations')
+          .select('name')
+          .eq('id', employee.org_id)
+          .single();
+        if (orgData) {
+          orgName = orgData.name;
+        }
+      }
+
       // Compute permissions based on roles
       const userRole = roles.find(r => r.id === employee.role_id);
       const permissions = userRole ? new Set(userRole.permissions) : new Set();
@@ -79,6 +92,8 @@ export const useAuthStore = create((set, get) => ({
         skills: employee.skills || [],
         position: employee.position,
         location: employee.location,
+        orgId: employee.org_id,
+        orgName: orgName,
       };
 
       set({
@@ -107,7 +122,7 @@ export const useAuthStore = create((set, get) => ({
     return data;
   },
 
-  register: async (email, password, firstName, lastName) => {
+  register: async (email, password, firstName, lastName, orgName, orgId) => {
     set({ loading: true });
     try {
       const { data, error: authError } = await supabase.auth.signUp({
@@ -116,7 +131,9 @@ export const useAuthStore = create((set, get) => ({
         options: {
           data: {
             first_name: firstName,
-            last_name: lastName
+            last_name: lastName,
+            org_name: orgName || null,
+            org_id: orgId || null,
           }
         }
       });
