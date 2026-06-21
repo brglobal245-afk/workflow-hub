@@ -4,12 +4,30 @@ import Sidebar from './Sidebar';
 import TopNav from './TopNav';
 import { useAuthStore } from '../../store/authStore';
 import { Toaster } from 'react-hot-toast';
+import OnboardingOverlay from '../../features/auth/OnboardingOverlay';
 
 export default function AppLayout() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, currentUser } = useAuthStore();
   const [collapsed, setCollapsed] = useState(false);
 
   if (!isAuthenticated) return <Navigate to="/login" replace />;
+
+  // Show onboarding wizard on first-time login
+  if (currentUser && currentUser.position === 'New Employee') {
+    return (
+      <>
+        <OnboardingOverlay />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: { fontFamily: 'var(--font-sans)', fontSize: '0.875rem', borderRadius: '10px' },
+            success: { iconTheme: { primary: 'var(--success-600)', secondary: '#fff' } },
+            error: { iconTheme: { primary: 'var(--danger-600)', secondary: '#fff' } },
+          }}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="app-layout">
@@ -35,3 +53,4 @@ export default function AppLayout() {
     </div>
   );
 }
+
